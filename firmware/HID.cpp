@@ -81,7 +81,9 @@ const uint8_t HID::scancodes[] = {
   [(int)Scancode::Down] = 0x51,
   [(int)Scancode::Up] = 0x52,
   [(int)Scancode::Capslock] = 0x39,
-  [(int)Scancode::Hyper] = 0x6D 
+  [(int)Scancode::BSlashNonUS] = 0x64,
+  [(int)Scancode::Copy] = 0x7c,
+  [(int)Scancode::Paste] = 0x7d,
 };
 
 const uint8_t HID::modifers[] = {
@@ -144,7 +146,7 @@ const HID::KeyInfo HID::scancodeMap[] = {
   [(int)Keymap::Key::Tab] = { .scancode = Scancode::Tab, .shift = false },
   [(int)Keymap::Key::Space] = { .scancode = Scancode::Space, .shift = false },
   [(int)Keymap::Key::Minus] = { .scancode = Scancode::Minus, .shift = false },
-  [(int)Keymap::Key::Equal] = { .scancode = Scancode::Grave, .shift = false },
+  [(int)Keymap::Key::Equal] = { .scancode = Scancode::Equal, .shift = false },
   [(int)Keymap::Key::LBrace] = { .scancode = Scancode::LBrace, .shift = false },
   [(int)Keymap::Key::RBrace] = { .scancode = Scancode::RBrace, .shift = false },
   [(int)Keymap::Key::BSlash] = { .scancode = Scancode::BSlash, .shift = false },
@@ -197,14 +199,20 @@ const HID::KeyInfo HID::scancodeMap[] = {
   [(int)Keymap::Key::Down] = { .scancode = Scancode::Down, .shift = false },
   [(int)Keymap::Key::Up] = { .scancode = Scancode::Up, .shift = false },
 
-  [(int)Keymap::Key::Capslock] = { .scancode = Scancode::Esc, .shift = false },
-  [(int)Keymap::Key::Insert] = { .scancode = Scancode::BSlash, .shift = false },
-  [(int)Keymap::Key::SL1] = { .scancode = Scancode::Equal, .shift = false },
-  [(int)Keymap::Key::SL3] = { .scancode = Scancode::Hyper, .shift = false },
+  [(int)Keymap::Key::Capslock] = { .scancode = Scancode::Capslock, .shift = false },
+  [(int)Keymap::Key::Insert] = { .scancode = Scancode::BSlashNonUS, .shift = false },
+  // [(int)Keymap::Key::SL1] = { .scancode = Scancode::Num1, .shift = false },
+  [(int)Keymap::Key::SL2] = { .scancode = Scancode::Esc, .shift = false },
+  // [(int)Keymap::Key::SL3] = { .scancode = Scancode::Num3, .shift = false },
   [(int)Keymap::Key::SL4] = { .scancode = Scancode::BSpace, .shift = false },
-  [(int)Keymap::Key::SR1] = { .scancode = Scancode::Minus, .shift = false },
+  // [(int)Keymap::Key::SL5] = { .scancode = Scancode::Num5, .shift = false },
+  // [(int)Keymap::Key::SL6] = { .scancode = Scancode::Num6, .shift = false },
+  [(int)Keymap::Key::SR1] = { .scancode = Scancode::Paste, .shift = false },
+  [(int)Keymap::Key::SR2] = { .scancode = Scancode::Copy,  .shift = false },
   [(int)Keymap::Key::SR3] = { .scancode = Scancode::Enter, .shift = false },
   [(int)Keymap::Key::SR4] = { .scancode = Scancode::Space, .shift = false }
+  // [(int)Keymap::Key::SR5] = { .scancode = Scancode::Num5, .shift = false },
+  // [(int)Keymap::Key::SR6] = { .scancode = Scancode::Num6, .shift = false }
 };
 
 HID::HID(void)
@@ -214,7 +222,7 @@ HID::HID(void)
 
 void HID::begin(void) {
   Bluefruit.begin();
-  Bluefruit.setName("Kinesis Advantage 2");
+  Bluefruit.setName("Kinesis Adv");
   Bluefruit.setTxPower(0);
   Bluefruit.autoConnLed(false);
 
@@ -259,24 +267,24 @@ void HID::sendKeys(
         report.modifier |= modifers[(int)HID::Mod::Shift]; break;
       case Keymap::Key::Sym: break;
 
-      case Keymap::Key::SL2:
+      case Keymap::Key::SL1:
+        report.modifier |= modifers[(int)HID::Mod::LAlt]; break;
+      case Keymap::Key::SL3:
         report.modifier |= modifers[(int)HID::Mod::LCtrl]; break;
       case Keymap::Key::SL5:
         report.modifier |= modifers[(int)HID::Mod::LAlt]; break;
-      case Keymap::Key::LShift:
-        report.modifier |= modifers[(int)HID::Mod::LShift]; break;
       case Keymap::Key::SL6:
-        report.modifier |= modifers[(int)HID::Mod::LCmd]; break;        
-      case Keymap::Key::SR2:
-        report.modifier |= modifers[(int)HID::Mod::RAlt]; break;
-      case Keymap::Key::RShift:
-        report.modifier |= modifers[(int)HID::Mod::RShift]; break;
+        report.modifier |= modifers[(int)HID::Mod::LCmd]; break;
+
       case Keymap::Key::SR5:
-        report.modifier |= modifers[(int)HID::Mod::RCtrl]; break;
+        report.modifier |= modifers[(int)HID::Mod::Alt]; break;
       case Keymap::Key::SR6:
         report.modifier |= modifers[(int)HID::Mod::RCmd]; break;
-      case Keymap::Key::Grave:
-        report.modifier |= modifers[(int)HID::Mod::LCtrl]; break;                      
+
+      case Keymap::Key::LShift:
+        report.modifier |= modifers[(int)HID::Mod::LShift]; break;
+      case Keymap::Key::RShift:
+        report.modifier |= modifers[(int)HID::Mod::RShift]; break;
       
       default: {
         auto info = scancodeMap[(int)key];
