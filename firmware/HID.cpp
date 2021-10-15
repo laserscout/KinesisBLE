@@ -252,6 +252,7 @@ void HID::sendKeys(
 ) {  
   auto oldReport = report;
   memset(&report, 0, sizeof(report));
+  bool prgrm = false;
 
   for (int k = 0, i = 0; k < (int)Keymap::Key::Count && i < 6; k++) {
     auto key = (Keymap::Key)k;
@@ -296,6 +297,10 @@ void HID::sendKeys(
         report.keycode[i++] = scancodes[(int)Scancode::C];
         break;
 
+      case Keymap::Key::Equal: prgrm = true; break;
+      case Keymap::Key::Num1: if (prgrm) { changeBound(1); } break;
+      case Keymap::Key::Num2: if (prgrm) { changeBound(2); } break;
+
       default: {
         auto info = scancodeMap[(int)key];
        
@@ -314,4 +319,8 @@ void HID::sendKeys(
 
 void HID::sendBattery( uint8_t percentage ) {
   blebas.write(percentage);
+}
+
+void HID::changeBound( uint8_t device ) {
+
 }

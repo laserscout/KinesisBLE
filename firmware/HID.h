@@ -52,6 +52,8 @@ class HID {
     static const KeyInfo scancodeMap[];
     static const uint8_t modMap[];
     
+    void changeBound(uint8_t device);
+
 };
 
 #endif
