@@ -30,18 +30,6 @@ void Keyboard::update(void) {
 }
 
 void Keyboard::indicateBatteryLevel(void) {
-  
-  uint8_t percentage = power.batteryRemainingPercentage();
-  
-  if(percentage > 75) {
-    led.numLEDsOnForDuration(4, batteryLEDOnDuration);
-   } else if (percentage > 50) {
-    led.numLEDsOnForDuration(3, batteryLEDOnDuration);
-   } else if (percentage > 25) {
-    led.numLEDsOnForDuration(2, batteryLEDOnDuration);
-   } else {
-    led.numLEDsOnForDuration(1, batteryLEDOnDuration);
-   }  
   if ((millis() - lastBatteryWriteTime) > (batteryWriteIntervalSeconds * 1000)) {
     uint8_t percentage = power.batteryRemainingPercentage();
     hid.sendBattery(percentage);
