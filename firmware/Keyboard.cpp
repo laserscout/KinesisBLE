@@ -24,8 +24,8 @@ void Keyboard::update(void) {
   }
 
   led.process();
-  restCheck();
   indicateBatteryLevel();
+  // restCheck();
   sleepCheck();
 }
 
