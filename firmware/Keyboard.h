@@ -26,7 +26,9 @@ class Keyboard {
     unsigned long idleTime;
     void indicateBatteryLevel(void);
     unsigned long batteryLEDOnDuration;
+    unsigned long lastBatteryWriteTime;
 
+    static const uint8_t batteryWriteIntervalSeconds = 30;
     static const uint8_t sleepMinutes = 10;
 };
 

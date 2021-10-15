@@ -10,6 +10,7 @@ class HID {
     HID(void);
     void begin(void);
     void sendKeys(const Keymap *km);
+    void sendBattery(uint8_t percentage);
   private:
 
     enum class Scancode : uint8_t {
@@ -43,6 +44,7 @@ class HID {
 
     BLEHidAdafruit bleHID;
     BLEDis bleDIS;
+    BLEBas  blebas;
     hid_keyboard_report_t report;
 
     static const uint8_t scancodes[];

@@ -231,6 +231,7 @@ void HID::begin(void) {
   
   bleDIS.begin();
   bleHID.begin();
+  blebas.begin();  // Start BLE Battery Service
 
   Bluefruit.Advertising.addFlags(BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE);
   Bluefruit.Advertising.addTxPower();
@@ -300,4 +301,8 @@ void HID::sendKeys(
   if (memcmp(&report, &oldReport, sizeof(report))) {       
     bleHID.keyboardReport(&report);
   }
+}
+
+void HID::sendBattery( uint8_t percentage ) {
+  blebas.write(percentage);
 }

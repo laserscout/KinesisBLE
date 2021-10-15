@@ -3,6 +3,7 @@
 Keyboard::Keyboard(void)
 : matrix(), keymap(), hid(), power(), restTimer() {
   idleTime = 0;
+  lastBatteryWriteTime = 0;
   int batterLEDOnMinutes = 3;
   batteryLEDOnDuration = batterLEDOnMinutes * 60 * 1000;
 }
@@ -11,7 +12,6 @@ void Keyboard::begin(void) {
   hid.begin();
   matrix.begin();
   led.begin();
-  indicateBatteryLevel();
 }
 
 void Keyboard::update(void) {
@@ -25,6 +25,7 @@ void Keyboard::update(void) {
 
   led.process();
   restCheck();
+  indicateBatteryLevel();
   sleepCheck();
 }
 
@@ -41,6 +42,11 @@ void Keyboard::indicateBatteryLevel(void) {
    } else {
     led.numLEDsOnForDuration(1, batteryLEDOnDuration);
    }  
+  if ((millis() - lastBatteryWriteTime) > (batteryWriteIntervalSeconds * 1000)) {
+    uint8_t percentage = power.batteryRemainingPercentage();
+    hid.sendBattery(percentage);
+    lastBatteryWriteTime = millis();
+  }
 }
 
 void Keyboard::sleepCheck(void) {
