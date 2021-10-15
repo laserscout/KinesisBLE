@@ -287,6 +287,15 @@ void HID::sendKeys(
       case Keymap::Key::RShift:
         report.modifier |= modifers[(int)HID::Mod::RShift]; break;
       
+      case Keymap::Key::SR1: //Paste "Macro"
+        report.modifier |= modifers[(int)HID::Mod::LCmd];
+        report.keycode[i++] = scancodes[(int)Scancode::V];
+        break;
+      case Keymap::Key::SR2: //Copy "Macro"
+        report.modifier |= modifers[(int)HID::Mod::LCmd];
+        report.keycode[i++] = scancodes[(int)Scancode::C];
+        break;
+
       default: {
         auto info = scancodeMap[(int)key];
        
