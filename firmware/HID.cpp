@@ -226,8 +226,8 @@ void HID::begin(void) {
   Bluefruit.setTxPower(0);
   Bluefruit.autoConnLed(false);
 
-  bleDIS.setManufacturer("TODO");
-  bleDIS.setModel("TODO");
+  bleDIS.setManufacturer("BLNET");
+  bleDIS.setModel("AdvantageBLE");
   
   bleDIS.begin();
   bleHID.begin();
